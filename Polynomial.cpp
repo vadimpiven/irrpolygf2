@@ -11,9 +11,6 @@
 
 #include "Polynomial.hpp"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
-
 /**
  * Создаёт новый многочлен над полем GF[2^n], n = 0,...,63.
  * @param[in] val представляет многочлен как 64-битное целое число,
@@ -37,7 +34,7 @@ uint_fast64_t Polynomial::Get() const noexcept {
  */
 [[nodiscard]]
 uint_fast64_t Polynomial::derivative() const noexcept {
-    return (val & 0xAA'AA'AA'AA) >> 1ul;
+    return (val & 0xAA'AA'AA'AA) >> 1ull;
 }
 
 /**
@@ -65,8 +62,6 @@ uint_fast64_t Polynomial::gcd(
  * Для вычисления степени используется встроенная в процессоры архитектуры
  * AMD64 и ARM команда для подсчёта числа ведущих нулей в числе.
  * Поэтому данный код можно компилировать только с использованием GCC (Clang).
- * Если степень входного многочлена 0 - то поведение функции не определено.
- * Проверка на 0 отсутствует для увеличения быстродействия.
  * Степень многочлена находится вычитанием из 63 (максимальная возможная степень)
  * числа ведущих нулей. Например, если число ведущих нулей 0, значит
  * старший бит – единица, значит многочлен степени 63 = 63 - 0.
@@ -75,6 +70,7 @@ uint_fast64_t Polynomial::gcd(
  */
 [[nodiscard]]
 uint_fast8_t Polynomial::deg(const uint_fast64_t p) noexcept {
+    if (p == 0) { return 0; }
     return static_cast<uint_fast8_t>
     (63 - __builtin_clzll(static_cast<unsigned long long>(p)));
 }
@@ -94,10 +90,6 @@ uint_fast64_t Polynomial::mod(
     }
     return p1;
 }
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wswitch-bool"
-#pragma ide diagnostic ignored "hicpp-multiway-paths-covered"
 
 /**
  * Выполняет последний шаг алгоритма Берлекампа проверки многочлена на неприводимость.
@@ -125,18 +117,18 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
 
     for (i = 0; i < degree; ++i) {
         // x ^ ip, p = 2
-        temp = mod(1ul << static_cast<uint_fast8_t>(2 * i), val, degree);
-        M[i] = temp ^ (1ul << i); // M -= E (mod 2)
+        temp = mod(1ull << static_cast<uint_fast8_t>(2 * i), val, degree);
+        M[i] = temp ^ (1ull << i); // M -= E (mod 2)
     }
 
     temp = 1; // mask
     k = 0; // count missed lines, should be exactly one
     // direct course of the Gauss method, M is mirrored horizontally
-    for (i = 0; i < degree; ++i, temp <<= 1ul) {
+    for (i = 0; i < degree; ++i, temp <<= 1ull) {
         flag = M[i] & temp;
         for (j = i + 1; j < degree; ++j) {
             if (M[j] & temp) {
-                // quicker then if-else, clang checks disabled with #pragma-s above
+                // quicker then if-else
                 switch (flag) {
                 case false: // swap
                     M[i] ^= M[j];
@@ -153,8 +145,6 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
     }
     return k != 1;
 }
-
-#pragma clang diagnostic pop
 
 /**
  * Определяет, является ли данный многочлен степени n неприводимым в поле GF[2].
@@ -176,5 +166,3 @@ bool Polynomial::IsIrredusible(const uint_fast8_t degree) const noexcept {
     return !(pp == 0 || gcd(val, pp) != 1
             || notBerlekampFinal(degree));
 }
-
-#pragma clang diagnostic pop

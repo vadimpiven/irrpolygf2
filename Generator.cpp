@@ -46,7 +46,7 @@ uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t 
 
     if (degree == 1) {
         // случайным образом возвращаем либо x, либо x+1
-        return binDis(gen) & 1ul ? 0x00'00'00'02 : 0x00'00'00'03;
+        return binDis(gen) & 1ull ? 0x00'00'00'02 : 0x00'00'00'03;
     }
     uint_fast64_t res; // возвращаемое значение
 
@@ -64,7 +64,7 @@ uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t 
     // по одному проверщику в каждом потоке
     auto c = std::vector<Checker>(threadsNum, Checker(&mutex, &cond));
     // генератор случайных чисел для формирования многочленов на проверку
-    std::uniform_int_distribution<uint_fast64_t> dis(0, (1ul << (degree - 1ul)) - 1);
+    std::uniform_int_distribution<uint_fast64_t> dis(0, (1ull << (degree - 1ull)) - 1);
 
     pthread_mutex_lock(&mutex);
     while (true) {
@@ -82,7 +82,7 @@ uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t 
             }
             // генерируем случайный многочлен для проверки
             // младший и старший коэффициенты всегда единицы
-            c[j].Set((1ul << degree) | (dis(gen) << 1ul) | 1ul, degree);
+            c[j].Set((1ull << degree) | (dis(gen) << 1ull) | 1ull, degree);
             // создаём новый поток для выполнения проверки
             pthread_create(&threads[j], nullptr, &Checker::Check, &c[j]);
             // отсоединеняем поток
