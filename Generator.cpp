@@ -7,10 +7,10 @@
  * @url     https://github.com/vadimpiven/irrpolygf2
  */
 
-#include <random>
 #include <thread>
 #include <pthread.h>
 
+#include "Random.hpp"
 #include "Generator.hpp"
 
 /**
@@ -39,14 +39,9 @@ uint_fast8_t Generator::countBusy(const std::vector<Checker> &c) noexcept {
  */
 [[nodiscard]]
 uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t threadsNum) noexcept {
-    // всё для генерации случайных чисел в заданном диапазоне, C++11
-    static std::random_device rd;
-    static std::mt19937_64 gen(rd());
-    static std::uniform_int_distribution<uint_fast64_t> binDis(0, 1);
-
     if (degree == 1) {
         // случайным образом возвращаем либо x, либо x+1
-        return binDis(gen) & 1ull ? 0x00'00'00'02 : 0x00'00'00'03;
+        return Random(1) & 1ull ? 0x00'00'00'02 : 0x00'00'00'03;
     }
     uint_fast64_t res; // возвращаемое значение
 
@@ -63,8 +58,6 @@ uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t 
 
     // по одному проверщику в каждом потоке
     auto c = std::vector<Checker>(threadsNum, Checker(&mutex, &cond));
-    // генератор случайных чисел для формирования многочленов на проверку
-    std::uniform_int_distribution<uint_fast64_t> dis(0, (1ull << (degree - 1ull)) - 1);
 
     pthread_mutex_lock(&mutex);
     while (true) {
@@ -82,7 +75,7 @@ uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t 
             }
             // генерируем случайный многочлен для проверки
             // младший и старший коэффициенты всегда единицы
-            c[j].Set((1ull << degree) | (dis(gen) << 1ull) | 1ull, degree);
+            c[j].Set((1ull << degree) | (Random(degree - 1ull) << 1ull) | 1ull, degree);
             // создаём новый поток для выполнения проверки
             pthread_create(&threads[j], nullptr, &Checker::Check, &c[j]);
             // отсоединеняем поток

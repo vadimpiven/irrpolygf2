@@ -6,5 +6,5 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 
 find_package(Threads REQUIRED)
-add_executable(${PROJECT_NAME} main.cpp Generator.cpp Checker.cpp Polynomial.cpp)
+add_executable(${PROJECT_NAME} main.cpp Generator.cpp Checker.cpp Polynomial.cpp Random.cpp)
 target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
