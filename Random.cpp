@@ -85,6 +85,7 @@ const std::array<uint_fast64_t, 63> irrPoly = {
  * @param k число бит (от 1 до 62), которые нужно заполнить случайными данными.
  * @return случайное число длиной k бит (всегда 0, если k задано неверно).
  */
+[[nodiscard]]
 uint_fast64_t Random(const uint_fast8_t k) noexcept {
     static std::vector<uint_fast64_t> seed(63, 1);
     static std::vector<bool> zero(63, true);

@@ -12,6 +12,7 @@
 
 #include <cstdint>
 
+[[nodiscard]]
 uint_fast64_t Random(uint_fast8_t) noexcept;
 
 #endif //BERLEKAMP_RANDOM_HPP
