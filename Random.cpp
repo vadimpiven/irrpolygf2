@@ -7,7 +7,6 @@
  * @url     https://github.com/vadimpiven/irrpolygf2
  */
 
-#include <array>
 #include <vector>
 
 #include "Random.hpp"
@@ -15,7 +14,7 @@
 /**
  * Неприводимые многочлены над GF[2] до степени 62 включительно.
  */
-const std::array<uint_fast64_t, 63> irrPoly = {
+const uint_fast64_t irrPoly[63] = {
         0x0000000000000001ull,
         0x0000000000000003ull,
         0x0000000000000007ull,
