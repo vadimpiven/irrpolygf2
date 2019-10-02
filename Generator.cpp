@@ -41,7 +41,7 @@ uint_fast8_t Generator::countBusy(const std::vector<Checker> &c) noexcept {
 uint_fast64_t Generator::generate(const uint_fast8_t degree, const uint_fast8_t threadsNum) noexcept {
     if (degree == 1) {
         // случайным образом возвращаем либо x, либо x+1
-        return Random(1) & 1ull ? 0x00'00'00'02 : 0x00'00'00'03;
+        return Random(1) ? 2ull : 3ull;
     }
     uint_fast64_t res; // возвращаемое значение
 

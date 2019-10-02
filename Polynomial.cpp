@@ -34,7 +34,7 @@ uint_fast64_t Polynomial::Get() const noexcept {
  */
 [[nodiscard]]
 uint_fast64_t Polynomial::derivative() const noexcept {
-    return (val & 0xAA'AA'AA'AA) >> 1ull;
+    return (val & 0xAA'AA'AA'AA'AA'AA'AA'AAull) >> 1ull;
 }
 
 /**
@@ -72,7 +72,7 @@ uint_fast64_t Polynomial::gcd(
 uint_fast8_t Polynomial::deg(const uint_fast64_t p) noexcept {
     if (p == 0) { return 0; }
     return static_cast<uint_fast8_t>
-    (63 - __builtin_clzll(static_cast<unsigned long long>(p)));
+    (63ull - __builtin_clzll(static_cast<unsigned long long>(p)));
 }
 
 /**
@@ -86,7 +86,7 @@ uint_fast64_t Polynomial::mod(
         uint_fast64_t p1, const uint_fast64_t p2, const uint_fast8_t degree
 ) noexcept {
     for (uint_fast8_t i = deg(p1); i >= degree && p1 != 0; i = deg(p1)) {
-        p1 ^= p2 << static_cast<uint_fast16_t>(i - degree);
+        p1 ^= (p2 << static_cast<uint_fast16_t>(i - degree));
     }
     return p1;
 }
@@ -117,7 +117,7 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
 
     for (i = 0; i < degree; ++i) {
         // x ^ ip, p = 2
-        temp = mod(1ull << static_cast<uint_fast8_t>(2 * i), val, degree);
+        temp = mod(1ull << static_cast<uint_fast8_t>(i * 2), val, degree);
         M[i] = temp ^ (1ull << i); // M -= E (mod 2)
     }
 

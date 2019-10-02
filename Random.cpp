@@ -90,7 +90,7 @@ uint_fast64_t Random(const uint_fast8_t k) noexcept {
     static std::vector<bool> zero(63, true);
     if (k == 0 || k > 62) { return 0; }
     if (zero[k]) { return zero[k] = false; }
-    seed[k] <<= 1u;
+    seed[k] <<= 1ull;
     seed[k] ^= (seed[k] & (1ull << k)) ? irrPoly[k] : 0;
     zero[k] = seed[k] == 1;
     return seed[k];
