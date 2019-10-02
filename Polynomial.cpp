@@ -66,7 +66,7 @@ uint_fast64_t Polynomial::gcd(
  * числа ведущих нулей. Например, если число ведущих нулей 0, значит
  * старший бит – единица, значит многочлен степени 63 = 63 - 0.
  * @param[in] p многочлен, степень от 0 до 63.
- * @return степень многочлена, от 1 до 63.
+ * @return степень многочлена.
  */
 [[nodiscard]]
 uint_fast8_t Polynomial::deg(const uint_fast64_t p) noexcept {
@@ -86,7 +86,7 @@ uint_fast64_t Polynomial::mod(
         uint_fast64_t p1, const uint_fast64_t p2, const uint_fast8_t degree
 ) noexcept {
     for (uint_fast8_t i = deg(p1); i >= degree && p1 != 0; i = deg(p1)) {
-        p1 ^= (p2 << static_cast<uint_fast16_t>(i - degree));
+        p1 ^= (p2 << static_cast<uint_fast8_t>(i - degree));
     }
     return p1;
 }

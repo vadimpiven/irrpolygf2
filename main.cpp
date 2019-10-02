@@ -4,16 +4,24 @@
 
 using namespace std;
 
-ostream& print(ostream& out, const uint_fast64_t p) {
+ostream &print(ostream &out, const uint_fast64_t p, const uint_fast8_t degree) {
     out << "IrreduciblePolynomialQ[";
     for (uint_fast8_t i = 0; i < 64; ++i) {
         if (p & (1ull << i)) { out << "+x^" << +i; }
     }
     out << ", Modulus -> 2]" << endl;
+    out << "MatrixRank[Table[PadRight[Abs[CoefficientList[PolynomialRemainder[x^(2 i),";
+    for (uint_fast8_t i = 0; i < 64; ++i) {
+        if (p & (1ull << i)) { out << "+x^" << +i; }
+    }
+    out << ", x], x]], " << +degree << "], {i, 0, " << +(degree - 1)
+        << "}] - IdentityMatrix[" << +degree << "]]" << endl;
     return out;
 }
 
 int main() {
-    print(cout, Generator::GetIrrPoly(48));
+    const uint_fast8_t degree = 48;
+    uint_fast64_t p = Generator::GetIrrPoly(degree);
+    print(cout, p, degree);
     return 0;
 }
