@@ -16,12 +16,12 @@ ostream &print(ostream &out, const uint_fast64_t p) {
 #include <chrono>
 #include <fstream>
 #include "Polynomial.hpp"
-#include "Random.hpp"
 
 uint_fast64_t GenerateAll(const uint_fast8_t degree) {
-    uint_fast64_t n = (1ull << degree), res = 0;
+    const uint_fast64_t n = (1ull << (degree - 1u));
+    uint_fast64_t res = 0;
     for (uint_fast64_t i = 0; i < n; ++i) {
-        res += Polynomial((1ull << degree) | (Random(degree - 1ull) << 1ull) | 1ull)
+        res += Polynomial((1ull << degree) | (i << 1ull) | 1ull)
                 .IsIrredusible(degree);
     }
     return res;
