@@ -47,7 +47,7 @@ uint_fast64_t Polynomial::derivative() const noexcept {
 [[nodiscard]]
 uint_fast64_t Polynomial::gcd(
         uint_fast64_t p1, uint_fast64_t p2
-        ) noexcept {
+) noexcept {
     uint_fast64_t temp;
     while (p2 != 0) {
         temp = mod(p1, p2, deg(p2));
@@ -66,7 +66,7 @@ uint_fast64_t Polynomial::gcd(
  * числа ведущих нулей. Например, если число ведущих нулей 0, значит
  * старший бит – единица, значит многочлен степени 63 = 63 - 0.
  * @param[in] p многочлен, степень от 0 до 63.
- * @return степень многочлена.
+ * @return степень многочлена от 0 до 63.
  */
 [[nodiscard]]
 uint_fast8_t Polynomial::deg(const uint_fast64_t p) noexcept {
@@ -89,6 +89,93 @@ uint_fast64_t Polynomial::mod(
         p1 ^= (p2 << static_cast<uint_fast8_t>(i - degree));
     }
     return p1;
+}
+
+/**
+ * Создаёт 128-битное число из 64-битного.
+ * @param[in] p 64-битное число.
+ */
+Polynomial::uint_fast128_t::uint_fast128_t(
+        const uint_fast64_t p
+) noexcept : h(0), l(p) {}
+
+/**
+ * Создаёт 128-битное число из двух 64-битных.
+ * @param[in] ph старшие 64 бита.
+ * @param[in] pl младшие 64 бита.
+ */
+Polynomial::uint_fast128_t::uint_fast128_t(
+        const uint_fast64_t ph, const uint_fast64_t pl
+) noexcept : h(ph), l(pl) {}
+
+/**
+ * Вычисляет степень многочлена над GF[2], представленного 128-битным числом.
+ * @return степень входного многочлена от 0 до 127.
+ */
+[[nodiscard]]
+uint_fast8_t Polynomial::uint_fast128_t::deg() const noexcept {
+    if (h == 0) {
+        if (l == 0) { return 0; }
+        return static_cast<uint_fast8_t>
+        (63ull - __builtin_clzll(static_cast<unsigned long long>(l)));
+    }
+    return static_cast<uint_fast8_t>
+    (127ull - __builtin_clzll(static_cast<unsigned long long>(h)));
+}
+
+/**
+ * Выполняет побитовый сдвиг 128-битного числа.
+ * @param[in] n на сколько бит сдвинуть.
+ * @return новое число, представляющее из себя сдвинутое старое.
+ */
+[[nodiscard]]
+Polynomial::uint_fast128_t Polynomial::uint_fast128_t::operator<<(
+        const uint_fast8_t n
+) const noexcept {
+    auto res = uint_fast128_t(h << n, n >= 64 ? 0 : l << n);
+    if (deg() + n > 63u) { res.h |= (n > 64u) ? (l << (n - 64u)) : (l >> (64u - n)); }
+    return res;
+}
+
+/**
+ * Реализует операцию XOR.
+ * @param[in] p 128-битное число, с которым необходимо сложить данное по модулю 2.
+ */
+void Polynomial::uint_fast128_t::operator^=(const uint_fast128_t p) noexcept {
+    h ^= p.h;
+    l ^= p.l;
+}
+
+/**
+ * @return младшие 64 бита 128-битного числа (предполагается, что старшие пусты).
+ */
+[[nodiscard]]
+uint_fast64_t Polynomial::uint_fast128_t::get() const noexcept {
+    return l;
+}
+
+/**
+ * @return является ли данное 128-битное число нулём.
+ */
+[[nodiscard]]
+bool Polynomial::uint_fast128_t::notZero() const noexcept {
+    return l != 0 || h != 0;
+}
+
+/**
+ * @param p1 делимое.
+ * @param p2 делитель.
+ * @param degree степень делителя.
+ * @return многочлен p1 по модулю многочлена p2.
+ */
+[[nodiscard]]
+uint_fast64_t Polynomial::mod(
+        uint_fast128_t p1, const uint_fast128_t p2, const uint_fast8_t degree
+) noexcept {
+    for (uint_fast8_t i = p1.deg(); i >= degree && p1.notZero(); i = p1.deg()) {
+        p1 ^= (p2 << static_cast<uint_fast8_t>(i - degree));
+    }
+    return p1.get();
 }
 
 /**
@@ -117,19 +204,21 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
 
     for (i = 0; i < degree; ++i) {
         // x ^ ip, p = 2
-        temp = mod(1ull << static_cast<uint_fast8_t>(i * 2), val, degree);
+        temp = i < 32 ?
+               // случай, когда x ^ ip влезает в 64 бита
+               mod(1ull << static_cast<uint_fast8_t>(i * 2), val, degree) :
+               // случай, когда x ^ ip не влезает в 64 бита
+               mod(uint_fast128_t(1ull) << static_cast<uint_fast8_t>(i * 2),
+                   uint_fast128_t(val), degree);
         M[i] = temp ^ (1ull << i); // M -= E (mod 2)
     }
 
-    temp = 1; // mask
-    k = 0; // count missed lines, should be exactly one
-    // direct course of the Gauss method, M is mirrored horizontally
-    for (i = 0; i < degree; ++i, temp <<= 1ull) {
+    // приведение матрицы к ступенчатому виду
+    for (i = k = 0, temp = 1; i < degree && k < degree; ++k, temp <<= 1ull) {
         flag = M[i] & temp;
         for (j = i + 1; j < degree; ++j) {
             if (M[j] & temp) {
-                // quicker then if-else
-                switch (flag) {
+                switch (flag) { // ~if-else
                 case false: // swap
                     M[i] ^= M[j];
                     M[j] = M[i] ^ M[j];
@@ -141,9 +230,9 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
                 }
             }
         }
-        k += !flag;
+        i += flag;
     }
-    return k != 1;
+    return i + 1 != degree;
 }
 
 /**

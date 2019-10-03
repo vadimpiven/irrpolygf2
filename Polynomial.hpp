@@ -19,13 +19,42 @@ class Polynomial {
     uint_fast64_t derivative() const noexcept;
 
     [[nodiscard]] static
-    uint_fast64_t gcd(uint_fast64_t,uint_fast64_t) noexcept;
+    uint_fast64_t gcd(uint_fast64_t, uint_fast64_t) noexcept;
 
     [[nodiscard]] static
     uint_fast8_t deg(uint_fast64_t) noexcept;
 
     [[nodiscard]] static
     uint_fast64_t mod(uint_fast64_t, uint_fast64_t, uint_fast8_t) noexcept;
+
+    class uint_fast128_t {
+        uint_fast64_t h;
+        uint_fast64_t l;
+
+    public:
+        explicit
+        uint_fast128_t(uint_fast64_t) noexcept;
+
+        explicit
+        uint_fast128_t(uint_fast64_t, uint_fast64_t) noexcept;
+
+        [[nodiscard]]
+        uint_fast8_t deg() const noexcept;
+
+        [[nodiscard]]
+        uint_fast128_t operator<<(uint_fast8_t) const noexcept;
+
+        void operator^=(uint_fast128_t) noexcept;
+
+        [[nodiscard]]
+        uint_fast64_t get() const noexcept;
+
+        [[nodiscard]]
+        bool notZero() const noexcept;
+    };
+
+    [[nodiscard]]
+    static uint_fast64_t mod(uint_fast128_t, uint_fast128_t, uint_fast8_t) noexcept;
 
     [[nodiscard]]
     bool notBerlekampFinal(uint_fast8_t) const noexcept;
