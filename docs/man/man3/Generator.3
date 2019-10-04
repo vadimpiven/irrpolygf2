@@ -1,0 +1,35 @@
+.TH "Generator" 3 "Пт 4 Окт 2019" "Version 1.0.0" "irrpolygf2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Generator
+.SH SYNOPSIS
+.br
+.PP
+.SS "Открытые статические члены"
+
+.in +1c
+.ti -1c
+.RI "static uint_fast64_t \fBGetIrrPoly\fP (uint_fast8_t) noexcept"
+.br
+.in -1c
+.SH "Методы"
+.PP 
+.SS "uint_fast64_t Generator::GetIrrPoly (uint_fast8_t degree)\fC [static]\fP, \fC [noexcept]\fP"
+Генерирует неприводимый многочлен заданной степени\&. При вызове подсчитывает число доступных потоков обращением к std::threads\&. 
+.PP
+\fBАргументы\fP
+.RS 4
+\fIdegree\fP степень многочлена в пределах от 1 до 63, проверка попадания в эти границы выполняется\&. 
+.RE
+.PP
+\fBВозвращает\fP
+.RS 4
+неприводимый многочлен требуемой степени, 0 в случае если degree задан некорректно, 1 в случае ошибки pthread\&. 
+.RE
+.PP
+
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpolygf2 из исходного текста\&.

@@ -1,0 +1,105 @@
+.TH "Checker" 3 "Пт 4 Окт 2019" "Version 1.0.0" "irrpolygf2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Checker
+.SH SYNOPSIS
+.br
+.PP
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "\fBChecker\fP (pthread_mutex_t *, pthread_cond_t *) noexcept"
+.br
+.ti -1c
+.RI "void \fBSet\fP (uint_fast64_t, uint_fast8_t) noexcept"
+.br
+.ti -1c
+.RI "uint_fast64_t \fBGet\fP () const noexcept"
+.br
+.ti -1c
+.RI "bool \fBIsNotDone\fP () const noexcept"
+.br
+.ti -1c
+.RI "bool \fBIsIrreducible\fP () const noexcept"
+.br
+.in -1c
+.SS "Открытые статические члены"
+
+.in +1c
+.ti -1c
+.RI "static void * \fBCheck\fP (void *arg) noexcept"
+.br
+.in -1c
+.SH "Конструктор(ы)"
+.PP 
+.SS "Checker::Checker (pthread_mutex_t * mutex, pthread_cond_t * cond)\fC [explicit]\fP, \fC [noexcept]\fP"
+Инициализирует новый объекта-проверщик, используемый для распараллеливания проверки многочленов на неприводимость\&. 
+.PP
+\fBАргументы\fP
+.RS 4
+\fImutex\fP мьютекс, относящийся к cond\&. 
+.br
+\fIcond\fP используется для сигнализирования об окончании работы\&. 
+.RE
+.PP
+
+.SH "Методы"
+.PP 
+.SS "void * Checker::Check (void * arg)\fC [static]\fP, \fC [noexcept]\fP"
+Используется для выполнения проверки на неприводимость в отдельном потоке pthread\&. 
+.PP
+\fBАргументы\fP
+.RS 4
+\fIarg\fP экземпляр \fBChecker\fP с установленным для проверки многочленом\&. 
+.RE
+.PP
+\fBВозвращает\fP
+.RS 4
+никакое значение не возвращается, т\&.к\&. выполнение функции, как и работа текущего потока, прекращается вызовом pthread_exit\&. 
+.RE
+.PP
+
+.SS "uint_fast64_t Checker::Get () const\fC [noexcept]\fP"
+
+.PP
+\fBВозвращает\fP
+.RS 4
+многочлен, для которого выполнялась проверка на неприводимость\&. 
+.RE
+.PP
+
+.SS "bool Checker::IsIrreducible () const\fC [noexcept]\fP"
+
+.PP
+\fBВозвращает\fP
+.RS 4
+неприводим ли многочлен, для которого была выполнена проверка\&. 
+.RE
+.PP
+
+.SS "bool Checker::IsNotDone () const\fC [noexcept]\fP"
+
+.PP
+\fBВозвращает\fP
+.RS 4
+закончена ли проверка на неприводимость\&. 
+.RE
+.PP
+
+.SS "void Checker::Set (uint_fast64_t p, uint_fast8_t degree)\fC [noexcept]\fP"
+
+.PP
+\fBАргументы\fP
+.RS 4
+\fIp\fP многочлен для проверки на неприводимость\&. 
+.br
+\fIdegree\fP степень многочлена p, от 1 до 63, не проверяется корректность для уменьшания числа выполняемых операций\&. 
+.RE
+.PP
+
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpolygf2 из исходного текста\&.

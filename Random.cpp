@@ -7,9 +7,9 @@
  * @url     https://github.com/vadimpiven/irrpolygf2
  */
 
-#include <vector>
-
 #include "Random.hpp"
+
+#ifdef PARFENOV_PLEASE
 
 /**
  * Неприводимые многочлены над GF[2] до степени 62 включительно.
@@ -80,6 +80,8 @@ const uint_fast64_t irrPoly[63] = {
         0x4B00000000000001ull,
 };
 
+#include <vector>
+
 /**
  * @param k число бит (от 1 до 62), которые нужно заполнить случайными данными.
  * @return случайное число длиной k бит (всегда 0, если k задано неверно).
@@ -95,3 +97,43 @@ uint_fast64_t Random(const uint_fast8_t k) noexcept {
     zero[k] = seed[k] == 1;
     return seed[k];
 }
+
+#else
+
+#include <random>
+#include <array>
+
+/**
+ * @tparam Indices число бит, оно же индекс в результурующем массиве.
+ * @return генераторы случайных чисел длиной k бит.
+ */
+template<std::size_t... k>
+constexpr auto make_array_helper(std::index_sequence<k...>)
+-> std::array<std::uniform_int_distribution<uint_fast64_t>, sizeof...(k)> {
+    return {{std::uniform_int_distribution<uint_fast64_t>(0, (1ull << k) - 1)...}};
+}
+
+/**
+ * Позволяет инициализировать на этапе компиляции массив заданного размера.
+ * @tparam N размер массива, который требуется инициализировать.
+ * @return массив результатов make_array_helper для каждого индекса.
+ */
+template<int N>
+constexpr auto make_array()
+-> std::array<std::uniform_int_distribution<uint_fast64_t>, N> {
+    return make_array_helper(std::make_index_sequence<N>{});
+}
+
+/**
+ * @param k число бит (от 1 до 62), которые нужно заполнить случайными данными.
+ * @return случайное число длиной k бит (всегда 0, если k задано неверно).
+ */
+[[nodiscard]]
+uint_fast64_t Random(const uint_fast8_t k) noexcept {
+    static std::random_device rd;
+    static std::mt19937_64 gen(rd());
+    static auto dis = make_array<63>();
+    return dis[k](gen);
+}
+
+#endif

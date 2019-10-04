@@ -5,13 +5,14 @@
 using namespace std;
 
 ostream &print(ostream &out, const uint_fast64_t p) {
-    out << "IrreduciblePolynomialQ[";
     for (uint_fast8_t i = 0; i < 64; ++i) {
         if (p & (1ull << i)) { out << "+x^" << +i; }
     }
-    out << ", Modulus -> 2]" << endl;
+    out << endl;
     return out;
 }
+
+#ifdef TIMINGS
 
 #include <chrono>
 #include <fstream>
@@ -58,8 +59,12 @@ void WriteTimings(const char file[]) {
     out.close();
 }
 
+#endif
+
 int main() {
     print(cout, Generator::GetIrrPoly(48));
-    WriteTimings("/Users/vadimpiven/Downloads/timings.txt");
+#ifdef TIMINGS
+    WriteTimings("timings.txt");
+#endif
     return 0;
 }

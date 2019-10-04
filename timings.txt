@@ -1,0 +1,256 @@
+deg: 2
+num: 1
+mic: 2
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 3
+num: 2
+mic: 4
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 4
+num: 3
+mic: 5
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 5
+num: 6
+mic: 13
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 6
+num: 9
+mic: 27
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 7
+num: 18
+mic: 64
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 8
+num: 30
+mic: 158
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 9
+num: 56
+mic: 312
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 10
+num: 99
+mic: 695
+mil: 0
+sec: 0
+min: 0
+hou: 0
+
+deg: 11
+num: 186
+mic: 1563
+mil: 1
+sec: 0
+min: 0
+hou: 0
+
+deg: 12
+num: 335
+mic: 3752
+mil: 3
+sec: 0
+min: 0
+hou: 0
+
+deg: 13
+num: 630
+mic: 8233
+mil: 8
+sec: 0
+min: 0
+hou: 0
+
+deg: 14
+num: 1161
+mic: 18098
+mil: 18
+sec: 0
+min: 0
+hou: 0
+
+deg: 15
+num: 2182
+mic: 39978
+mil: 39
+sec: 0
+min: 0
+hou: 0
+
+deg: 16
+num: 4080
+mic: 86532
+mil: 86
+sec: 0
+min: 0
+hou: 0
+
+deg: 17
+num: 7710
+mic: 193168
+mil: 193
+sec: 0
+min: 0
+hou: 0
+
+deg: 18
+num: 14532
+mic: 377962
+mil: 377
+sec: 0
+min: 0
+hou: 0
+
+deg: 19
+num: 27594
+mic: 739724
+mil: 739
+sec: 0
+min: 0
+hou: 0
+
+deg: 20
+num: 52377
+mic: 1616649
+mil: 1616
+sec: 1
+min: 0
+hou: 0
+
+deg: 21
+num: 99858
+mic: 3430739
+mil: 3430
+sec: 3
+min: 0
+hou: 0
+
+deg: 22
+num: 190557
+mic: 7355506
+mil: 7355
+sec: 7
+min: 0
+hou: 0
+
+deg: 23
+num: 364722
+mic: 15657238
+mil: 15657
+sec: 15
+min: 0
+hou: 0
+
+deg: 24
+num: 698870
+mic: 33899117
+mil: 33899
+sec: 33
+min: 0
+hou: 0
+
+deg: 25
+num: 1342176
+mic: 70471614
+mil: 70471
+sec: 70
+min: 1
+hou: 0
+
+deg: 26
+num: 2580795
+mic: 158298233
+mil: 158298
+sec: 158
+min: 2
+hou: 0
+
+deg: 27
+num: 4971008
+mic: 324554725
+mil: 324554
+sec: 324
+min: 5
+hou: 0
+
+deg: 28
+num: 9586395
+mic: 687634061
+mil: 687634
+sec: 687
+min: 11
+hou: 0
+
+deg: 29
+num: 18512790
+mic: 1464265814
+mil: 1464265
+sec: 1464
+min: 24
+hou: 0
+
+deg: 30
+num: 35790267
+mic: 3115926174
+mil: 3115926
+sec: 3115
+min: 51
+hou: 0
+
+deg: 31
+num: 69273666
+mic: 6764395645
+mil: 6764395
+sec: 6764
+min: 112
+hou: 1
+
+deg: 32
+num: 134215680
+mic: 14155165115
+mil: 14155165
+sec: 14155
+min: 235
+hou: 3
+
+deg: 33
+num: 260300986
+mic: 29940255457
+mil: 29940255
+sec: 29940
+min: 499
+hou: 8
+
