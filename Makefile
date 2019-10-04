@@ -3,14 +3,14 @@ release: ## build release binary
 	@mkdir -p cmake-build-release
 	@cd cmake-build-release && cmake -DCMAKE_BUILD_TYPE=Release ..
 	@cd cmake-build-release && cmake --build .
-	@./cmake-build-release/berlekamp-zassenhaus
+	@./cmake-build-release/irrpolygf2
 
 .PHONY: debug
 debug: ## build release binary
 	@mkdir -p cmake-build-debug
 	@cd cmake-build-debug && cmake -DCMAKE_BUILD_TYPE=Debug ..
 	@cd cmake-build-debug && cmake --build .
-	@./cmake-build-debug/berlekamp-zassenhaus
+	@./cmake-build-debug/irrpolygf2
 
 .PHONY: docs
 docs: ## generate full documentation
