@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpolygf2: Генератор неприводимых многочленов над полем GF[2] (степени от 1 до 63)</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpolygf2
+   &#160;<span id="projectnumber">1.0.0</span>
+   </div>
+   <div id="projectbrief">Генератор неприводимых многочленов над полем GF[2] (степени от 1 до 63)</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.16 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Генератор неприводимых многочленов над полем GF[2] (степени от 1 до 63) </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p>Данная программа реализует алгоритм Берлекампа проверки неприводимости многочленов. Получение неприводимого многочлена выполняется путём генерации случайных многочленов с последующей проверкой их на неприводимость. Первый же найденный неприводимый многочлен возвращается.</p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Ограничения</h1>
+<p>Программа будет работать только на компьютерах с архитектурой AMD64 и ARM64 (т.к. требуется поддержка 64-битных чиесл). Компиляция возможна только с помощью GCC или Clang (т.к. используется макрос <code>__builtin_clzll</code>) с поддержкой C++ 17. Также необходимо наличие библиотеки POSIX Threads (т.к. на её основе выполняется распараллеливание генератора). Для компиляции желательно наличие Cmake (т.к. проект удобнее всего собирать именно с помощью него).</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Использование</h1>
+<p>Необходимо подключить <code>#include "Generator.hpp"</code> и вызвать <code>Generator::GetIrrPoly(degree)</code>, где <code>degree</code> – степень требуемого неприводимого многочлена (от 1 до 63). Результирующий многочлен имеет тип <code>uint_fast64_t</code>, т.е. представлен 64-битным числом. В этом числе каждый бит содержит значение коэффициента многочлена при соответствующей номеру бита степени <code>x</code>. Например многочлен <code>P2 = x^2 + 1</code> будет представлен числом <code>0b0...0101</code>.</p>
+<p>Если требуется проверка отдельно взятого многочлена на неприводимость необходимо подключить <code>#include <a class="el" href="_polynomial_8hpp.html">Polynomial.hpp</a></code> и вызвать <code><a class="el" href="class_polynomial.html">Polynomial(p)</a>.IsIrredusible()</code>, где <code>p</code> - число типа <code>uint_fast64_t</code>, кодирующее проверяемый многочлен. В результате вернётся булевое значение, говорящее о приводимости (<code>false</code>) или неприводимости (<code>true</code>) данного многочлена. Проверка отдельных многочленов выполняется в один поток, таки образом она не требует наличия библиотеки POSIX Threads, остальные ограничения сохраняются.</p>
+<p>Для компиляции готового кода при наличии установленных <code>make</code> и <code>cmake</code> достаточно выполнить <code>make debug</code> или <code>make release</code> в корневой папке проекта для получения и запуска соответствующей сборки.</p>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Документация</h1>
+<p>Документация кода программы сгенерирована с помощью Doxygen и может быть найдена в папке [docs](docs) или на соответствующей странице <a href="https://vadimpiven.github.io/irrpolygf2/html/">GitHub Pages</a>. Незадукомментированные возможности:</p><ul>
+<li>в файле <code>main.cpp</code> находится код приведённого ниже бенчмарка, для его активации необходимо дописать <code>#define TIMINGS</code> в начале файла.</li>
+<li>если перед подключением <code>#include "Random.hpp"</code> в файле <code><a class="el" href="_generator_8cpp.html">Generator.cpp</a></code> добавить <code>#define PARFENOV_PLEASE</code>, то вместо генератора псевдослучайных чисел из стандартной библиотеки будет использоваться генератор, реализованный самостоятельно. Этот генератор точно перебирает все числа, имеющиее число значащих бит не более требуемого. Тем не менее, начальным значением всегда является <code>1</code>, таким образом при каждом запуске генератор будет возвращать одну и ту же последовательность.</li>
+</ul>
+<p>Для обновления документации при наличии установленных <code>make</code> и <code>doxygen</code> достаточно выполнить <code>make docs</code> в корневой папке проекта.</p>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Бенчмарк</h1>
+<p>Для тестирования скорости работы программы был выполнен запуск проверки всех многочленов заданной степени на неприводимость. (Проверялись только многочлены, старший и младший коэффициенты которых отличны от нуля, т.к. остальные многочлены очевидно приводимы). Проверка выполнялась в одном потоке на компьютере с CPU Intel Core i7 2.6 Ghz и RAM 16 GB 2133 MHz LPDDR3. Были выполнениы расчёты для степеней от 2 до 33 включительно. Результаты бенчмарка можно найти в файле <a href="timings.txt">timings.txt</a>. Результаты представлены в следующем виде: </p><div class="fragment"><div class="line">deg: степень проверяемых многочленов</div>
+<div class="line">num: число найденных неприводимых многочленов данной степени</div>
+<div class="line">mic: общее время выполнения проверки в микросекундах</div>
+<div class="line">mil: общее время выполнения проверки в миллисекундах</div>
+<div class="line">sec: общее время выполнения проверки в секундах</div>
+<div class="line">min: общее время выполнения проверки в минутах</div>
+<div class="line">hou: общее время выполнения проверки в часах</div>
+</div><!-- fragment --><p> Следует отметить, что результаты проверки многочленов до 11 степени совпадают с таблицей многочленов, приведённой в двухтомнике "Конечные поля" авторов Лидл Р., Нидеррайтер Г. Результаты для более высоких степеней проверялись выборочно. В результате проверок ошибок в работе алгоритма найдено не было.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+Отказ от ответственности</h1>
+<p>Код программы создан на основе <a href="https://github.com/xsevios/irreducible-polynomial">ранее выполненной реализации</a>, а также статьи "A Formalization of Berlekamp’s Factorization Algorithm" авторов Jose Divason, Sebastiaan Joosten, Rene Thiemann, Akihisa Yamada. В реализации могут (с очень малой вероятностью) присутствовать ошибки. Тем не менее, данное программное обеспечение распространяется под лицензией MIT, поэтому автор не несёт ответственности за возможные ошибки и их последствия, а также не планирует их самостоятельного исправления. </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpolygf2. Последние изменения: Вт 8 Окт 2019 12:08:07. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.16
+</small></address>
+</body>
+</html>
