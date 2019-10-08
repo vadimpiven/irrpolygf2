@@ -179,7 +179,7 @@ uint_fast64_t Polynomial::mod(
 }
 
 /**
- * Выполняет последний шаг алгоритма Берлекампа проверки многочлена на неприводимость.
+ * Выполняет построение матрицы Берлекампа и вычисление её ранга.
  * Строится матрица M[nxn], где строки - коэффициенты многочлена x^(ip) (mod P(x)),
  * где p - двойка, 0 < i < n, P(x) - текущий многочлен над полем GF[2] степени n.
  * Подробное описание и пример расчёта можно найти в статье
@@ -187,15 +187,13 @@ uint_fast64_t Polynomial::mod(
  * http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf (стр. 3-4).
  * Матрица строится в зеркально отражённом виде для оптимизации хранимых данных.
  * Затем из матрицы вычитается единичная матрица.
- * В конце вычисляется ранг получившейся матрицы. Если n - rgM = 1, то, с учётом
- * выполненных до вызова данной функции проверок, данный многочлен неприводим.
+ * В конце вычисляется ранг получившейся матрицы.
  * @param[in] degree степень текущего многочлена, от 1 до 63,
  * не проверяется корректность для уменьшания числа выполняемых операций.
- * @return является ли данный многочлен степени n неприводимы над полем GF[2],
- * с учётом предварительных проверок.
+ * @return ранг матрицы Берлекампа.
  */
 [[nodiscard]]
-bool Polynomial::berlekampFinal(const uint_fast8_t degree) const noexcept {
+uint_fast8_t Polynomial::berlekampMatrixRank(const uint_fast8_t degree) const noexcept {
     std::vector<uint_fast64_t> M(degree);
     uint_fast64_t temp;
     uint_fast8_t i, j, k;
@@ -231,7 +229,7 @@ bool Polynomial::berlekampFinal(const uint_fast8_t degree) const noexcept {
         }
         i += flag;
     }
-    return i + 1 == degree;
+    return i;
 }
 
 /**
@@ -244,6 +242,8 @@ bool Polynomial::berlekampFinal(const uint_fast8_t degree) const noexcept {
  * Если общие множители (многочлены, а не числа) есть, т.е. многочлены
  * не взаимно просты, то f(x) делится на них, т.е. он не неприводим.
  * Третий шаг - простоение матрицы Берлекампа и вычисление её ранга.
+ * Если ранг матрицы Берлекампа равен степени многочлена минус 1,
+ * то многочлен неприводим.
  * @param[in] degree степень текущего многочлена, от 1 до 63,
  * не проверяется корректность для уменьшания числа выполняемых операций.
  * @return является ли данный многочлен степени n неприводимы над полем GF[2].
@@ -251,5 +251,6 @@ bool Polynomial::berlekampFinal(const uint_fast8_t degree) const noexcept {
 [[nodiscard]]
 bool Polynomial::IsIrredusible(const uint_fast8_t degree) const noexcept {
     auto pp = derivative();
-    return pp != 0 && gcd(val, pp) == 1 && berlekampFinal(degree);
+    return pp != 0 && gcd(val, pp) == 1 &&
+            berlekampMatrixRank(degree) == degree - 1;
 }
