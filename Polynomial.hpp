@@ -57,7 +57,7 @@ class Polynomial {
     static uint_fast64_t mod(uint_fast128_t, uint_fast128_t, uint_fast8_t) noexcept;
 
     [[nodiscard]]
-    bool notBerlekampFinal(uint_fast8_t) const noexcept;
+    bool berlekampFinal(uint_fast8_t) const noexcept;
 
 public:
     explicit

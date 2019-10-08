@@ -192,11 +192,10 @@ uint_fast64_t Polynomial::mod(
  * @param[in] degree степень текущего многочлена, от 1 до 63,
  * не проверяется корректность для уменьшания числа выполняемых операций.
  * @return является ли данный многочлен степени n неприводимы над полем GF[2],
- * с учётом предварительных проверок, ведущее отрицание используется для
- * уменьшения числа выполняемых операций.
+ * с учётом предварительных проверок.
  */
 [[nodiscard]]
-bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
+bool Polynomial::berlekampFinal(const uint_fast8_t degree) const noexcept {
     std::vector<uint_fast64_t> M(degree);
     uint_fast64_t temp;
     uint_fast8_t i, j, k;
@@ -232,7 +231,7 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
         }
         i += flag;
     }
-    return i + 1 != degree;
+    return i + 1 == degree;
 }
 
 /**
@@ -252,6 +251,5 @@ bool Polynomial::notBerlekampFinal(const uint_fast8_t degree) const noexcept {
 [[nodiscard]]
 bool Polynomial::IsIrredusible(const uint_fast8_t degree) const noexcept {
     auto pp = derivative();
-    return !(pp == 0 || gcd(val, pp) != 1
-            || notBerlekampFinal(degree));
+    return pp != 0 && gcd(val, pp) == 1 && berlekampFinal(degree);
 }
